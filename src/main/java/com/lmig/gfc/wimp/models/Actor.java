@@ -1,12 +1,17 @@
 package com.lmig.gfc.wimp.models;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Actor {
@@ -14,15 +19,19 @@ public class Actor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
 	@Column(length = 75, nullable = false)
 	private String firstName;
-
 	@Column(length = 75)
 	private String lastName;
-
 	private Long activeSinceYear;
 	private Date birthDate;
+
+	@JsonIgnore
+	@ManyToMany(mappedBy = "actors")
+	private Set<Movie> movies;
+
+	@OneToMany(mappedBy = "actor")
+	private Set<Award> awards;
 
 	public Actor() {
 	}
@@ -72,6 +81,22 @@ public class Actor {
 
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
+	}
+
+	public Set<Movie> getMovies() {
+		return movies;
+	}
+
+	public void setMovies(Set<Movie> movies) {
+		this.movies = movies;
+	}
+
+	public Set<Award> getAwards() {
+		return awards;
+	}
+
+	public void setAwards(Set<Award> awards) {
+		this.awards = awards;
 	}
 
 }
